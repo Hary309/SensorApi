@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SensorApi.Models;
 using SensorApi.Services;
@@ -29,6 +29,32 @@ namespace SensorApi.Controllers
         public double Predict()
         {
             return 0;
+        }
+
+        [HttpGet("feed/{count}")]
+        public ActionResult Feed(int count)
+        {
+            var random = new Random();
+
+            double error = random.NextDouble() / 100;
+
+            double currentValue = random.NextDouble() * 1000;
+
+            var latest = voltageSensorService.GetLatest();
+
+            if (latest is not null)
+            {
+                currentValue = latest.CurrentVoltage;
+            }
+
+            for (var i = 0; i < count; i++)
+            {
+                voltageSensorService.Add(currentValue, error);
+
+                currentValue += (random.NextDouble() - 0.5) * 10.0;
+            }
+
+            return Ok();
         }
     }
 }
