@@ -23,7 +23,7 @@ namespace SensorApi.Services
         {
             var value = new VoltageSensorValue
             {
-                TimeStamp = DateTime.Now,
+                TimeStamp = DateTimeOffset.UtcNow,
                 CurrentVoltage = voltage,
                 Error = error
             };
