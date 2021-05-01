@@ -33,7 +33,7 @@ namespace SensorApi
 
             services.AddSingleton<DatabaseSettings>(sp => sp.GetRequiredService<IOptions<DatabaseSettings>>().Value);
 
-            services.AddScoped<IVoltageSensorRepository, VoltageSensorRepository>();
+            services.AddSingleton<IVoltageSensorService, VoltageSensorService>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

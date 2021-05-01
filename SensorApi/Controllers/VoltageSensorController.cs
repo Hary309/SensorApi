@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using SensorApi.Data.Models;
+using SensorApi.Models;
 using SensorApi.Services;
 using System;
 using System.Collections.Generic;
@@ -10,19 +10,19 @@ using System.Threading.Tasks;
 namespace SensorApi.Controllers
 {
     [ApiController]
-    [Route("sensor")]
+    [Route("voltage")]
     public class VoltageSensorController : ControllerBase
     {
-        IVoltageSensorRepository voltageRepository;
-        public VoltageSensorController(IVoltageSensorRepository repository)
+        IVoltageSensorService voltageSensorService;
+        public VoltageSensorController(IVoltageSensorService service)
         {
-            voltageRepository = repository;
+            voltageSensorService = service;
         }
 
         [HttpGet("recent")]
-        public double Recent()
+        public ActionResult<VoltageSensorValue> Recent()
         {
-            return voltageRepository.GetLatest().CurrentVoltage;
+            return voltageSensorService.GetLatest();
         }
 
         [HttpGet("predict")]

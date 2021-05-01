@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
-namespace SensorApi.Data.Models
+namespace SensorApi.Models
 {
-    public class VoltageSensor
+    public class VoltageSensorValue
     {
-        /// <summary>
-        /// Given id for the measurement
-        /// </summary>
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
         /// <summary>
