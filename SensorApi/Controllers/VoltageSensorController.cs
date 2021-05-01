@@ -14,9 +14,13 @@ namespace SensorApi.Controllers
     public class VoltageSensorController : ControllerBase
     {
         IVoltageSensorService voltageSensorService;
-        public VoltageSensorController(IVoltageSensorService service)
+
+        IVoltagePredictService voltagePredictService;
+
+        public VoltageSensorController(IVoltageSensorService service, IVoltagePredictService predictService)
         {
             voltageSensorService = service;
+            voltagePredictService = predictService;
         }
 
         [HttpGet("recent")]
@@ -26,9 +30,12 @@ namespace SensorApi.Controllers
         }
 
         [HttpGet("predict")]
-        public double Predict()
+        public double Predict([FromQuery] int hours = 0, [FromQuery] int minutes = 0, [FromQuery] int seconds = 0)
         {
-            return 0;
+            TimeSpan timeSpan = new TimeSpan(hours, minutes, seconds);
+            var data = voltageSensorService.List();
+
+            return voltagePredictService.Predict(timeSpan, data);
         }
 
         [HttpGet("feed/{count}")]
