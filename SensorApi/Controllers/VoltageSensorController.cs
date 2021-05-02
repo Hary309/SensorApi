@@ -24,7 +24,7 @@ namespace SensorApi.Controllers
         }
 
         [HttpGet("recent")]
-        public ActionResult<VoltageSensorValue> Recent()
+        public ActionResult<VoltageSensorEntry> Recent()
         {
             return voltageSensorService.GetLatest();
         }

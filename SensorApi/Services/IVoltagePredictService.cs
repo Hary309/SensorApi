@@ -7,6 +7,6 @@ namespace SensorApi.Services
 {
     public interface IVoltagePredictService
     {
-        double Predict(TimeSpan time, IEnumerable<VoltageSensorValue> data);
+        double Predict(TimeSpan time, IEnumerable<VoltageSensorEntry> data);
     }
 }

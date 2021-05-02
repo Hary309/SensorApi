@@ -9,19 +9,19 @@ namespace SensorApi.Services
 {
     public class VoltageSensorService : IVoltageSensorService
     {
-        IMongoCollection<VoltageSensorValue> _collection;
+        IMongoCollection<VoltageSensorEntry> _collection;
 
         public VoltageSensorService(DatabaseSettings settings)
         {
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
 
-            _collection = database.GetCollection<VoltageSensorValue>("voltage");
+            _collection = database.GetCollection<VoltageSensorEntry>("voltage");
         }
 
         public void Add(double voltage, double error)
         {
-            var value = new VoltageSensorValue
+            var value = new VoltageSensorEntry
             {
                 TimeStamp = DateTimeOffset.UtcNow,
                 CurrentVoltage = voltage,
@@ -31,12 +31,12 @@ namespace SensorApi.Services
             _collection.InsertOne(value);
         }
 
-        public VoltageSensorValue GetLatest()
+        public VoltageSensorEntry GetLatest()
         {
             return _collection.Find(x => true).ToList().LastOrDefault();
         }
 
-        public IEnumerable<VoltageSensorValue> List()
+        public IEnumerable<VoltageSensorEntry> List()
         {
             return _collection.Find(book => true).ToList();
         }

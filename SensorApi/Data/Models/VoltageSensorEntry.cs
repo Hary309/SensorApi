@@ -4,7 +4,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace SensorApi.Data.Models
 {
-    public class VoltageSensorValue
+    public class VoltageSensorEntry
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]

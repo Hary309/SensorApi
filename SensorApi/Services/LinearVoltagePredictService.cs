@@ -8,7 +8,7 @@ namespace SensorApi.Services
 {
     class LinearVoltagePredictService : IVoltagePredictService
     {
-        public double Predict(TimeSpan time, IEnumerable<VoltageSensorValue> data)
+        public double Predict(TimeSpan time, IEnumerable<VoltageSensorEntry> data)
         {
             int count = data.Count();
             double[] x = new double[count];
