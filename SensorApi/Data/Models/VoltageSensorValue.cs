@@ -2,7 +2,7 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace SensorApi.Models
+namespace SensorApi.Data.Models
 {
     public class VoltageSensorValue
     {

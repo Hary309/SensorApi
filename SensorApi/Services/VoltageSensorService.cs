@@ -1,5 +1,5 @@
 ﻿using MongoDB.Driver;
-using SensorApi.Models;
+using SensorApi.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

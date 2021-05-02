@@ -1,4 +1,4 @@
-﻿using SensorApi.Models;
+﻿using SensorApi.Data.Models;
 using System.Collections.Generic;
 
 namespace SensorApi.Services

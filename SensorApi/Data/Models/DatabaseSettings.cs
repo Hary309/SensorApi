@@ -1,4 +1,4 @@
-namespace SensorApi.Models
+namespace SensorApi.Data.Models
 {
     public class DatabaseSettings
     {

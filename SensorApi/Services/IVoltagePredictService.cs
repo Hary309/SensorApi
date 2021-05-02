@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-using SensorApi.Models;
+using SensorApi.Data.Models;
 
 namespace SensorApi.Services
 {

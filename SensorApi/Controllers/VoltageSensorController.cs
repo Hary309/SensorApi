@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using SensorApi.Models;
+using Microsoft.AspNetCore.Mvc;
+using SensorApi.Data.Models;
 using SensorApi.Services;
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Net.WebSockets;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SensorApi.Controllers

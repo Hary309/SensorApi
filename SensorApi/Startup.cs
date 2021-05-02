@@ -5,8 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using SensorApi.Data.Models;
 
-using SensorApi.Models;
 using SensorApi.Services;
 
 namespace SensorApi
