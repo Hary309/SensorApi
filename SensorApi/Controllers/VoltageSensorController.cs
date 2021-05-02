@@ -84,6 +84,10 @@ namespace SensorApi.Controllers
                 {
                     logger.LogWarning(e, "Cannot deserialize json");
                 }
+                catch (ArgumentException e)
+                {
+                    logger.LogWarning(e.Message);
+                }
             } while (!result.CloseStatus.HasValue);
 
             logger.LogInformation($"WebSocket closed connection, added {dataCount} entries");
