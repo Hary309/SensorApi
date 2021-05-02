@@ -21,6 +21,11 @@ namespace SensorApi.Services
 
         public void Add(double voltage, double error)
         {
+            if (error < 0.0)
+            {
+                throw new ArgumentException("Error cannot be smaller than 0");
+            }
+
             var value = new VoltageSensorEntry
             {
                 TimeStamp = DateTimeOffset.UtcNow,
