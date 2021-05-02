@@ -1,9 +1,12 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using SensorApi.Data.Dto;
 using SensorApi.Data.Models;
 using SensorApi.Services;
 using System;
 using System.Net.WebSockets;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,12 +16,15 @@ namespace SensorApi.Controllers
     [Route("voltage")]
     public class VoltageSensorController : ControllerBase
     {
+        ILogger<VoltageSensorController> logger;
+
         IVoltageSensorService voltageSensorService;
 
         IVoltagePredictService voltagePredictService;
 
-        public VoltageSensorController(IVoltageSensorService service, IVoltagePredictService predictService)
+        public VoltageSensorController(ILogger<VoltageSensorController> logger, IVoltageSensorService service, IVoltagePredictService predictService)
         {
+            this.logger = logger;
             voltageSensorService = service;
             voltagePredictService = predictService;
         }
@@ -38,30 +44,51 @@ namespace SensorApi.Controllers
             return voltagePredictService.Predict(timeSpan, data);
         }
 
-        [HttpGet("feed/{count}")]
-        public ActionResult Feed(int count)
+        [HttpGet("ws")]
+        public async Task GetAsync()
         {
-            var random = new Random();
-
-            double error = random.NextDouble() / 100;
-
-            double currentValue = random.NextDouble() * 1000;
-
-            var latest = voltageSensorService.GetLatest();
-
-            if (latest is not null)
+            if (HttpContext.WebSockets.IsWebSocketRequest)
             {
-                currentValue = latest.CurrentVoltage;
+                using var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
+                await Echo(webSocket);
             }
-
-            for (var i = 0; i < count; i++)
+            else
             {
-                voltageSensorService.Add(currentValue, error);
-
-                currentValue += (random.NextDouble() - 0.5) * 10.0;
+                HttpContext.Response.StatusCode = 400;
             }
+        }
 
-            return Ok();
+        private async Task Echo(WebSocket webSocket)
+        {
+            var buffer = new byte[1024 * 4];
+
+            WebSocketReceiveResult result = null;
+
+            long dataCount = 0;
+
+            do
+            {
+                result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+
+                try
+                {
+                    if (result.Count > 0)
+                    {
+                        string data = Encoding.UTF8.GetString(buffer, 0, result.Count);
+                        VoltageSensorEntryDto dto = JsonSerializer.Deserialize<VoltageSensorEntryDto>(data);
+                        voltageSensorService.Add(dto.Voltage, dto.Error);
+                        dataCount++;
+                    }
+                }
+                catch (JsonException e)
+                {
+                    logger.LogWarning(e, "Cannot deserialize json");
+                }
+            } while (!result.CloseStatus.HasValue);
+
+            logger.LogInformation($"WebSocket closed connection, added {dataCount} entries");
+
+            await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
         }
     }
 }
