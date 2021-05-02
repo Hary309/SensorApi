@@ -13,7 +13,7 @@ def start_client():
     currentVoltage = random.random() * 1000
 
     while ws.connected:
-        readings = {"voltage": currentVoltage, "error": error}
+        readings = {"Voltage": currentVoltage, "Error": error}
 
         print(json.dumps(readings))
         ws.send(json.dumps(readings))
